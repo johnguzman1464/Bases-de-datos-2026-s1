@@ -10,7 +10,7 @@ INCREMENT 1;
 ```
 
 # DDL
-Utilizamos estas secuencias para la creacion de las tablas:
+Realizamos la creacion de las tablas:
 
 # TABLA CARRERA
 ```sql
@@ -91,7 +91,7 @@ CREATE TABLE matricula (
 );
 ```
 # DML
-Utilizamos las secuencias para insertas los datos en las tablas:
+Insertamos los datos en las tablas:
 
 # DATOS CARRERA
 ```sql
