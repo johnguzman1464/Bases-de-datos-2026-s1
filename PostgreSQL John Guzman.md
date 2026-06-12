@@ -198,26 +198,31 @@ Aqui tenemos la secuencia y como se ve cada tabla en pgAdmin:
 ```sql
 SELECT * FROM carrera;
 ```
+
 <img width="555" height="218" alt="image" src="https://github.com/user-attachments/assets/b1d899e8-9317-4aa0-b262-f526bd02469b" />
 
 ```sql
 SELECT * FROM materias;
 ```
+
 <img width="550" height="313" alt="image" src="https://github.com/user-attachments/assets/f2b393b6-ddb2-4e18-84e5-a53c40d348c8" />
 
 ```sql
 SELECT * FROM profesor;
 ```
+
 <img width="602" height="223" alt="image" src="https://github.com/user-attachments/assets/4f25f67d-967e-449f-851d-22f2824f0b6b" />
 
 ```sql
 SELECT * FROM estudiante;
 ```
+
 <img width="844" height="286" alt="image" src="https://github.com/user-attachments/assets/d91f708d-c4f1-499b-ba45-c6d722cb1508" />
 
 ```sql
 SELECT * FROM matriculadas;
 ```
+
 <img width="565" height="494" alt="image" src="https://github.com/user-attachments/assets/1bf543ab-9d41-4219-889c-304fbe39bb4c" />
 
 # Consulta
