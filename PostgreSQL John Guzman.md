@@ -236,6 +236,106 @@ Asi se ve el pgAdmin:
 
 <img width="338" height="441" alt="image" src="https://github.com/user-attachments/assets/4a475375-c4e8-42eb-8ef8-10cb4fbe537c" />
 
+# Crear vista:
+Creamos una vista y la invocamos:
+
+```sql
+CREATE VIEW resumen_estudiantes AS
+SELECT
+    e.cod_estudiante,
+    e.nombre_completo,
+    c.nombre AS carrera
+FROM estudiante e
+INNER JOIN carrera c
+ON e.cod_carrera = c.cod_carrera;
+```
+
+```sql
+SELECT *
+FROM resumen_estudiantes;
+```
+
+Visualizacion:
+
+<img width="555" height="319" alt="image" src="https://github.com/user-attachments/assets/ac2333db-05b5-4369-a3c4-90fc569b5234" />
+
+# FULL OUTER JOIN
+
+```sql
+
+SELECT
+    e.nombre_completo,
+    m.cod_materia,
+    m.nota_final
+FROM estudiante e
+FULL OUTER JOIN matriculadas m
+ON e.cod_estudiante = m.cod_estudiante;
+
+```
+
+Visualizacion:
+
+<img width="424" height="484" alt="image" src="https://github.com/user-attachments/assets/85a07161-c2c2-4385-a943-0bc7497f9184" />
+
+# SELF JOIN
+
+```sql
+SELECT
+    e1.nombre_completo AS estudiante1,
+    e2.nombre_completo AS estudiante2,
+    c.nombre AS carrera
+FROM estudiante e1
+INNER JOIN estudiante e2
+ON e1.cod_carrera = e2.cod_carrera
+AND e1.cod_estudiante < e2.cod_estudiante
+
+INNER JOIN carrera c
+ON e1.cod_carrera = c.cod_carrera;
+
+```
+
+Visualizacion:
+
+<img width="512" height="290" alt="image" src="https://github.com/user-attachments/assets/01c7c742-ca40-4bfb-9956-e02d688d96ef" />
+
+# Trigger para el valor de las notas:
+
+Este trigger se encarga de verificar si las notas estan entre el rango de 0.0 a 5.0
+
+```sql
+CREATE OR REPLACE FUNCTION validar_nota()
+RETURNS TRIGGER
+AS $$
+BEGIN
+
+    IF NEW.nota_final < 0 OR NEW.nota_final > 5 THEN
+        RAISE EXCEPTION
+        'La nota debe estar entre 0 y 5';
+    END IF;
+
+    RETURN NEW;
+
+END;
+$$ LANGUAGE plpgsql;
+```
+
+```sql
+CREATE TRIGGER trg_validar_nota
+BEFORE INSERT OR UPDATE
+ON matriculadas
+FOR EACH ROW
+EXECUTE FUNCTION validar_nota();
+```
+
+Comprobacion:
+
+Correcto:
+
+<img width="748" height="618" alt="image" src="https://github.com/user-attachments/assets/9bf82f40-d69c-4959-849a-f7007f219828" />
+
+Incorrecto:
+
+<img width="738" height="526" alt="image" src="https://github.com/user-attachments/assets/0bfb2823-1b6b-4d4b-aa61-c5f9e60152bf" />
 
 Ahora continuamos con consultas mas avanzadas pertenecientes a los JOINS:
 
