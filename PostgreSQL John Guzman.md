@@ -337,7 +337,7 @@ Incorrecto:
 
 <img width="738" height="526" alt="image" src="https://github.com/user-attachments/assets/0bfb2823-1b6b-4d4b-aa61-c5f9e60152bf" />
 
-Ahora continuamos con consultas mas avanzadas pertenecientes a los JOINS:
+Ahora continuamos con consultas mas avanzadas pertenecientes a los JOINS (Estos 30 ejercicios abarcan temas similares a los evaluados en el parcial):
 
 [Ir a Consultas Avanzadas (Joins)](CONSULTAS_JOINS.md)
 
