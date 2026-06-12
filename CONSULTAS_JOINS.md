@@ -434,68 +434,139 @@ VISUALIZACION:
 <img width="413" height="489" alt="image" src="https://github.com/user-attachments/assets/b806e6f9-5a03-4a96-95f3-4b39ac82d397" />
 
 # CONSULTA #25
-no se we
+Mostrar el ranking general de estudiantes ordenado por promedio de mayor a menor. 
 
 ```sql
-
+SELECT *,
+       RANK() OVER
+       (
+           ORDER BY promedio DESC
+       ) ranking_general
+FROM
+(
+    SELECT cod_estudiante,
+           AVG(nota_final) promedio
+    FROM matriculadas
+    GROUP BY cod_estudiante
+) t;
 ```
 
 VISUALIZACION:
 
--
+<img width="421" height="293" alt="image" src="https://github.com/user-attachments/assets/8308fa82-164b-427f-aa4b-a4734faaa994" />
 
 # CONSULTA #26
-no se we
+Calcular la diferencia entre la nota actual y la nota anterior de cada estudiante para ver su progreso.
 
 ```sql
-
+SELECT cod_estudiante,
+       nota_final,
+       nota_final -
+       LAG(nota_final)
+       OVER(
+           PARTITION BY cod_estudiante
+           ORDER BY anio,semestre
+       ) diferencia
+FROM matriculadas;
 ```
 
 VISUALIZACION:
 
--
+<img width="432" height="492" alt="image" src="https://github.com/user-attachments/assets/5cc94776-8072-4115-b2ef-6351299e0cd7" />
 
 # CONSULTA #27
-no se we
+Numerar las matrículas de cada estudiante en orden cronológico. 
 
 ```sql
-
+SELECT *,
+       ROW_NUMBER()
+       OVER(
+           PARTITION BY cod_estudiante
+           ORDER BY anio,semestre
+       ) numero_matricula
+FROM matriculadas;
 ```
 
 VISUALIZACION:
 
--
+<img width="691" height="488" alt="image" src="https://github.com/user-attachments/assets/ca29266c-cabe-4e11-9559-b5461c4e6620" />
 
 # CONSULTA #28
-no se we
+Mostrar la mejor nota acumulada de cada estudiante a medida que avanza en sus matrículas.
 
 ```sql
-
+SELECT cod_estudiante,
+       nota_final,
+       MAX(nota_final)
+       OVER(
+           PARTITION BY cod_estudiante
+           ORDER BY anio,semestre
+           ROWS UNBOUNDED PRECEDING
+       ) mejor_hasta_ahora
+FROM matriculadas;
 ```
 
 VISUALIZACION:
 
--
+<img width="422" height="488" alt="image" src="https://github.com/user-attachments/assets/ff974bb6-52af-47d8-97f1-6c3d659d90d6" />
 
 # CONSULTA #29
-no se we
+Por cada carrera mostrar: total de estudiantes, promedio general de notas y nombre de alguna materia de esa carrera. 
 
 ```sql
-
+SELECT c.nombre,
+       COUNT(DISTINCT e.cod_estudiante) total_estudiantes,
+       AVG(ma.nota_final) promedio_general,
+       MIN(m.nombre) materia_ejemplo
+FROM carrera c
+LEFT JOIN estudiante e
+ON c.cod_carrera=e.cod_carrera
+LEFT JOIN materias m
+ON c.cod_carrera=m.cod_carrera
+LEFT JOIN matriculadas ma
+ON m.cod_materia=ma.cod_materia
+GROUP BY c.nombre;
 ```
 
 VISUALIZACION:
 
--
-
+<img width="638" height="191" alt="image" src="https://github.com/user-attachments/assets/ea09fca4-bb2f-45a5-adec-38e29bc9a0ec" />
 
 # CONSULTA #30
-no se we
+Listar el estudiante con mayor promedio por carrera usando funciones de ventana.
 
 ```sql
+WITH Promedios AS
+(
+    SELECT c.nombre AS carrera,
+           e.cod_estudiante,
+           e.nombre_completo,
+           AVG(ma.nota_final) promedio,
 
+           RANK() OVER
+           (
+               PARTITION BY c.cod_carrera
+               ORDER BY AVG(ma.nota_final) DESC
+           ) posicion
+
+    FROM estudiante e
+    INNER JOIN carrera c
+    ON e.cod_carrera=c.cod_carrera
+
+    INNER JOIN matriculadas ma
+    ON e.cod_estudiante=ma.cod_estudiante
+
+    GROUP BY
+        c.cod_carrera,
+        c.nombre,
+        e.cod_estudiante,
+        e.nombre_completo
+)
+SELECT *
+FROM Promedios
+WHERE posicion = 1;
 ```
 
 VISUALIZACION:
 
--
+<img width="696" height="189" alt="image" src="https://github.com/user-attachments/assets/b1e1d5c9-6983-403f-99e8-74cf3339f972" />
