@@ -187,6 +187,10 @@ UPDATE profesor
 SET email = 'dawoncito@unal.edu.co'
 WHERE cedula = 1050607010;
 
+UPDATE profesor
+SET email= 'carlitosR@unal.edu.co'
+WHERE cedula =1050607999;
+
 ```
 # Visualizacion de las tablas
 Aqui tenemos la secuencia y como se ve cada tabla en pgAdmin:
@@ -194,28 +198,27 @@ Aqui tenemos la secuencia y como se ve cada tabla en pgAdmin:
 ```sql
 SELECT * FROM carrera;
 ```
-<img width="458" height="162" alt="image" src="https://github.com/user-attachments/assets/c520fb6f-b105-48bc-9071-069aa69c9765" />
+<img width="555" height="218" alt="image" src="https://github.com/user-attachments/assets/b1d899e8-9317-4aa0-b262-f526bd02469b" />
 
 ```sql
 SELECT * FROM materias;
 ```
-<img width="459" height="190" alt="image" src="https://github.com/user-attachments/assets/32f06d51-9aa0-48ce-9a38-2de9e0a6a250" />
+<img width="550" height="313" alt="image" src="https://github.com/user-attachments/assets/f2b393b6-ddb2-4e18-84e5-a53c40d348c8" />
 
 ```sql
 SELECT * FROM profesor;
 ```
-<img width="604" height="163" alt="image" src="https://github.com/user-attachments/assets/eafc756c-ce3a-47d5-9cab-140a9d141990" />
-
+<img width="602" height="223" alt="image" src="https://github.com/user-attachments/assets/4f25f67d-967e-449f-851d-22f2824f0b6b" />
 
 ```sql
 SELECT * FROM estudiante;
 ```
-<img width="841" height="134" alt="image" src="https://github.com/user-attachments/assets/fa58d997-04b7-4bc1-aef9-01d41a51bc48" />
+<img width="844" height="286" alt="image" src="https://github.com/user-attachments/assets/d91f708d-c4f1-499b-ba45-c6d722cb1508" />
 
 ```sql
 SELECT * FROM matriculadas;
 ```
-<img width="571" height="165" alt="image" src="https://github.com/user-attachments/assets/39106c4e-ad82-444a-a24b-d81ff1248606" />
+<img width="565" height="494" alt="image" src="https://github.com/user-attachments/assets/1bf543ab-9d41-4219-889c-304fbe39bb4c" />
 
 # Consulta
 Aqui tenemos un ejemplo de una consulta, en la cual nos mostrara los codigos estudiantes y el codigo de la materia en la cual tengan mas de 3.0:
@@ -224,9 +227,9 @@ SELECT cod_estudiante, cod_materia
 FROM matriculadas
 WHERE nota_final >= 3.0;
 ```
-Asi se ve el pgAdmin.
+Asi se ve el pgAdmin:
 
-<img width="336" height="138" alt="image" src="https://github.com/user-attachments/assets/55b6d732-39b9-4613-9e21-afe6e9765a97" />
+<img width="338" height="441" alt="image" src="https://github.com/user-attachments/assets/4a475375-c4e8-42eb-8ef8-10cb4fbe537c" />
 
 
 Ahora continuamos con consultas mas avanzadas pertenecientes a los JOINS:
