@@ -14,6 +14,7 @@ ON e.cod_carrera = c.cod_carrera;
 ```
 
 VISUALIZACION:
+
 <img width="548" height="316" alt="image" src="https://github.com/user-attachments/assets/cf3d5d61-6236-4dd8-9eed-1da5451487e4" />
 
 
