@@ -255,103 +255,183 @@ VISUALIZACION:
 <img width="332" height="214" alt="image" src="https://github.com/user-attachments/assets/1aebe964-4120-478d-97e8-c8cec6703fea" />
 
 # CONSULTA #16
-no se we
+Listar los estudiantes que tienen nota mayor al promedio de notas de su propia carrera.
 
 ```sql
-
+SELECT DISTINCT e.nombre_completo
+FROM estudiante e
+INNER JOIN matriculadas ma
+ON e.cod_estudiante=ma.cod_estudiante
+WHERE ma.nota_final >
+(
+    SELECT AVG(ma2.nota_final)
+    FROM matriculadas ma2
+    INNER JOIN estudiante e2
+    ON ma2.cod_estudiante=e2.cod_estudiante
+    WHERE e2.cod_carrera=e.cod_carrera
+);
 ```
 
 VISUALIZACION:
 
--
+<img width="331" height="209" alt="image" src="https://github.com/user-attachments/assets/8acbaf8e-67bc-43b3-8f54-a5ca9a0e1a08" />
 
 # CONSULTA #17
-no se we
+Mostrar los estudiantes que nunca han reprobado (ninguna nota menor a 3.0). 
 
 ```sql
-
+SELECT e.nombre_completo
+FROM estudiante e
+WHERE NOT EXISTS
+(
+    SELECT *
+    FROM matriculadas ma
+    WHERE ma.cod_estudiante=e.cod_estudiante
+    AND ma.nota_final < 3.0
+);
 ```
 
 VISUALIZACION:
 
--
+<img width="334" height="244" alt="image" src="https://github.com/user-attachments/assets/eee322c8-6450-41b9-9fe0-ae83952236fd" />
 
 # CONSULTA #18
-no se we
+Mostrar la materia con la nota más alta registrada en toda la universidad. 
 
 ```sql
-
+SELECT m.nombre,
+       ma.nota_final
+FROM matriculadas ma
+INNER JOIN materias m
+ON ma.cod_materia=m.cod_materia
+WHERE ma.nota_final=
+(
+    SELECT MAX(nota_final)
+    FROM matriculadas
+);
 ```
 
 VISUALIZACION:
 
--
+<img width="332" height="161" alt="image" src="https://github.com/user-attachments/assets/301660c9-af19-41cb-a1c6-f769dc5fb38f" />
 
 # CONSULTA #19
-no se we
+Listar los estudiantes que han cursado más materias que el promedio de materias cursadas por todos los estudiantes. 
 
 ```sql
-
+SELECT e.nombre_completo
+FROM estudiante e
+INNER JOIN matriculadas ma
+ON e.cod_estudiante=ma.cod_estudiante
+GROUP BY e.cod_estudiante,e.nombre_completo
+HAVING COUNT(*) >
+(
+    SELECT AVG(cantidad)
+    FROM
+    (
+        SELECT COUNT(*) cantidad
+        FROM matriculadas
+        GROUP BY cod_estudiante
+    ) t
+);
 ```
 
 VISUALIZACION:
 
--
+<img width="335" height="141" alt="image" src="https://github.com/user-attachments/assets/07325d23-85d7-479a-9c12-ef01ca9e9ac3" />
 
 # CONSULTA #20
-no se we
+Mostrar los profesores que dictan materias en más de una carrera.
 
 ```sql
-
+SELECT p.nombre
+FROM profesor p
+INNER JOIN materias m
+ON p.cedula=m.cedula_profesor
+GROUP BY p.cedula,p.nombre
+HAVING COUNT(DISTINCT m.cod_carrera) > 1;
 ```
 
 VISUALIZACION:
 
--
+<img width="331" height="143" alt="image" src="https://github.com/user-attachments/assets/de0913dd-81fa-4232-8f2e-355188943826" />
 
 # CONSULTA #21
-no se we
+Asignar un ranking de notas por materia, donde el estudiante con mayor nota queda en puesto 1. 
 
 ```sql
-
+SELECT m.nombre,
+       e.nombre_completo,
+       ma.nota_final,
+       RANK() OVER
+       (
+           PARTITION BY m.cod_materia
+           ORDER BY ma.nota_final DESC
+       ) ranking
+FROM matriculadas ma
+INNER JOIN estudiante e
+ON ma.cod_estudiante=e.cod_estudiante
+INNER JOIN materias m
+ON ma.cod_materia=m.cod_materia;
 ```
 
 VISUALIZACION:
 
--
+<img width="561" height="493" alt="image" src="https://github.com/user-attachments/assets/f39dee25-01a7-481e-ba2d-d7c83464b8d5" />
 
 # CONSULTA #22
-no se we
+Mostrar la nota de cada estudiante junto con el promedio de notas de su carrera en la misma fila.
 
 ```sql
-
+SELECT e.nombre_completo,
+       ma.nota_final,
+       AVG(ma.nota_final)
+       OVER(PARTITION BY e.cod_carrera)
+       promedio_carrera
+FROM estudiante e
+INNER JOIN matriculadas ma
+ON e.cod_estudiante=ma.cod_estudiante;
 ```
 
 VISUALIZACION:
 
--
+<img width="463" height="492" alt="image" src="https://github.com/user-attachments/assets/e99297a0-794d-44dc-8dba-4bebeb7c5372" />
 
 # CONSULTA #23
-no se we
+Mostrar la nota actual de cada estudiante junto con la nota de su matrícula anterior. 
 
 ```sql
-
+SELECT cod_estudiante,
+       nota_final,
+       LAG(nota_final)
+       OVER(
+           PARTITION BY cod_estudiante
+           ORDER BY anio,semestre
+       ) nota_anterior
+FROM matriculadas;
 ```
 
 VISUALIZACION:
 
--
+<img width="405" height="491" alt="image" src="https://github.com/user-attachments/assets/77845e80-d250-4039-81eb-e288b470d4a2" />
 
 # CONSULTA #24
-no se we
+Mostrar la nota actual y la nota de la siguiente matrícula para ver si el estudiante mejoró o bajó. 
 
 ```sql
-
+SELECT cod_estudiante,
+       nota_final,
+       LEAD(nota_final)
+       OVER(
+           PARTITION BY cod_estudiante
+           ORDER BY anio,semestre
+       ) nota_siguiente
+FROM matriculadas;
 ```
 
 VISUALIZACION:
 
--
+<img width="413" height="489" alt="image" src="https://github.com/user-attachments/assets/b806e6f9-5a03-4a96-95f3-4b39ac82d397" />
 
 # CONSULTA #25
 no se we
