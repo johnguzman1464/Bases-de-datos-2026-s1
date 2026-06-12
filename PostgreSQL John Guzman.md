@@ -1,5 +1,5 @@
 # Bases de datos Practica PostgreSQL John Guzman
-Se creo una base de datos simple de un sistema universitario utilizando secuencias DML, DLL y PostgreSQL
+Se creo una base de datos simple de un sistema universitario utilizando secuencias DML, DLL, Vistas, Triggers y PostgreSQL
 
 # PostgreSQL
 Utilizamos esta secuencia para generar automaticamente las ID de la tabla estudiantes:
