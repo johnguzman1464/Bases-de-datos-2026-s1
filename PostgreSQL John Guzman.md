@@ -161,3 +161,6 @@ Asi se ve el pgAdmin.
 
 <img width="336" height="138" alt="image" src="https://github.com/user-attachments/assets/55b6d732-39b9-4613-9e21-afe6e9765a97" />
 
+Ahora continuamos con consultas mas avanzadas pertenecientes a los JOINS:
+
+
