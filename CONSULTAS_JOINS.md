@@ -168,60 +168,91 @@ VISUALIZACION:
 
 <img width="334" height="206" alt="image" src="https://github.com/user-attachments/assets/bbb9f830-d719-4361-8115-c23ab91fe8c9" />
 
-# CONSULTA #11
-no se we
+# CONSULTA #11 
+Mostrar las carreras que tienen más de 3 estudiantes matriculados en total.
 
 ```sql
-
+SELECT c.nombre,
+       COUNT(*) total
+FROM estudiante e
+INNER JOIN carrera c
+ON e.cod_carrera=c.cod_carrera
+GROUP BY c.nombre
+HAVING COUNT(*) > 3;
 ```
 
 VISUALIZACION:
 
--
+<img width="340" height="418" alt="image" src="https://github.com/user-attachments/assets/de0abfbc-ea6e-4502-bccf-464524a1126e" />
 
 # CONSULTA #12
-no se we
+Mostrar por cada profesor cuántas materias ha dictado en total.
 
 ```sql
-
+SELECT p.nombre,
+       COUNT(*) materias
+FROM profesor p
+INNER JOIN materias m
+ON p.cedula=m.cedula_profesor
+GROUP BY p.cedula,p.nombre;
 ```
 
 VISUALIZACION:
 
--
+<img width="332" height="195" alt="image" src="https://github.com/user-attachments/assets/056b5ae7-c5b4-4c82-bc4c-efe9b95db425" />
 
 # CONSULTA #13
-no se we
+Mostrar el año y semestre con mayor cantidad de matrículas registradas
 
 ```sql
-
+SELECT anio,
+       semestre,
+       COUNT(*) total
+FROM matriculadas
+GROUP BY anio,semestre
+ORDER BY total DESC
+LIMIT 1;
 ```
 
 VISUALIZACION:
 
--
+<img width="332" height="139" alt="image" src="https://github.com/user-attachments/assets/c5a07931-1d8c-4401-b30a-6334d6dce90c" />
 
 # CONSULTA #14
-no se we
+Mostrar las materias cuyo promedio de nota sea inferior a 3.5. 
 
 ```sql
-
+SELECT m.nombre,
+       AVG(ma.nota_final) promedio
+FROM matriculadas ma
+INNER JOIN materias m
+ON ma.cod_materia=m.cod_materia
+GROUP BY m.nombre
+HAVING AVG(ma.nota_final) < 3.5;
 ```
 
 VISUALIZACION:
 
--
+<img width="330" height="145" alt="image" src="https://github.com/user-attachments/assets/550f1bb8-11c5-4a06-943f-e78e34950df0" />
 
 # CONSULTA #15
-no se we
+Listar los estudiantes cuya nota en alguna materia supera el promedio general de todas las matrículas. 
 
 ```sql
-
+SELECT DISTINCT e.nombre_completo
+FROM estudiante e
+INNER JOIN matriculadas ma
+ON e.cod_estudiante=ma.cod_estudiante
+WHERE ma.nota_final >
+(
+    SELECT AVG(nota_final)
+    FROM matriculadas
+);
 ```
 
 VISUALIZACION:
 
--
+<img width="332" height="214" alt="image" src="https://github.com/user-attachments/assets/1aebe964-4120-478d-97e8-c8cec6703fea" />
 
 # CONSULTA #16
 no se we
