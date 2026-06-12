@@ -5,46 +5,69 @@ Se creo una base de datos simple de un sistema universitario utilizando secuenci
 Utilizamos esta secuencia para generar automaticamente las ID de la tabla estudiantes:
 ```sql
 CREATE SEQUENCE seq_estudiante
-    START WITH 100
-    INCREMENT BY 1
-    MINVALUE 100;
+START 100
+INCREMENT 1;
 ```
 
 # DDL
 Utilizamos estas secuencias para la creacion de las tablas:
+
+# TABLA CARRERA
 ```sql
 CREATE TABLE carrera (
     cod_carrera INT PRIMARY KEY,
     nombre VARCHAR(100),
     facultad VARCHAR(100)
 );
-
-CREATE TABLE materias (
-    cod_materia INT PRIMARY KEY,
-    nombre VARCHAR(100),
-    facultad VARCHAR(100)
-);
-
+```
+# TABLA PROFESOR
+```sql
 CREATE TABLE profesor (
     cedula BIGINT PRIMARY KEY,
     nombre VARCHAR(100),
     departamento VARCHAR(100)
 );
+```
+
+# TABLA MATERIAS
+```sql
+CREATE TABLE materias (
+    cod_materia INT PRIMARY KEY,
+    nombre VARCHAR(100),
+
+    cod_carrera INT,
+    cedula_profesor BIGINT,
+
+    FOREIGN KEY (cod_carrera)
+        REFERENCES carrera(cod_carrera),
+
+    FOREIGN KEY (cedula_profesor)
+        REFERENCES profesor(cedula)
+);
+```
+
+# TABLA ESTUDIANTE
+```sql
 
 CREATE TABLE estudiante (
     cod_estudiante INT PRIMARY KEY
-        DEFAULT nextval('seq_estudiante'), --aqui se usa el valor generado por la secuencia PostgreSQL
+        DEFAULT nextval('seq_estudiante'),
+
     nombre_completo VARCHAR(150),
     email VARCHAR(100),
     fecha_nacimiento DATE,
     estado VARCHAR(50),
+
     cod_carrera INT,
 
-    CONSTRAINT fk_estudiante_carrera
-        FOREIGN KEY (cod_carrera)
+    FOREIGN KEY (cod_carrera)
         REFERENCES carrera(cod_carrera)
 );
 
+```
+
+# TABLA MATRICULA
+```sql
 CREATE TABLE matricula (
     cod_estudiante INT,
     cod_materia INT,
@@ -52,52 +75,96 @@ CREATE TABLE matricula (
     semestre INT,
     nota_final FLOAT,
 
-    CONSTRAINT pk_matricula
-        PRIMARY KEY (
-            cod_estudiante,
-            cod_materia,
-            anio,
-            semestre
-        ),
+    PRIMARY KEY
+    (
+        cod_estudiante,
+        cod_materia,
+        anio,
+        semestre
+    ),
 
-    CONSTRAINT fk_matricula_estudiante
-        FOREIGN KEY (cod_estudiante)
+    FOREIGN KEY (cod_estudiante)
         REFERENCES estudiante(cod_estudiante),
 
-    CONSTRAINT fk_matricula_materia
-        FOREIGN KEY (cod_materia)
+    FOREIGN KEY (cod_materia)
         REFERENCES materias(cod_materia)
 );
 ```
 # DML
 Utilizamos las secuencias para insertas los datos en las tablas:
 
+# DATOS CARRERA
 ```sql
 INSERT INTO carrera VALUES
-(1, 'Ingenieria de Sistemas', 'Ingenieria'),
-(2, 'Ciencia Politica', 'Ciencias Humanas');
-
-INSERT INTO materias VALUES
-(10, 'Bases de Datos', 'Ingenieria'),
-(20, 'Marxismo I', 'Ciencias Politicas'),
-(21, 'Fundamentos del Estado', 'Ciencias Politicas');
-
+(1,'Ingenieria de Sistemas','Ingenieria'),
+(2,'Ciencia Politica','Ciencias Humanas'),
+(3,'Administracion de Empresas','Economia');
+```
+# DATOS PROFESORES
+```sql
 INSERT INTO profesor VALUES
-(1050607933, 'Mario Lopez', 'Ingenieria'),
-(1050607010, 'David Wong', 'Ciencias Politicas');
-
-INSERT INTO estudiante
-(nombre_completo, email, fecha_nacimiento, estado, cod_carrera)
-VALUES
-('Juan Perez', 'juan@correo.com', '2004-05-12', 'Activo', 1);
-
-INSERT INTO matricula VALUES
-(100, 10, 2026, 1, 4.7);
-
-INSERT INTO matricula VALUES
-(100, 20, 2024, 2, 2.6);
+(1050607933,'Mario Lopez','Ingenieria'),
+(1050607010,'David Wong','Ciencias Politicas'),
+(1050607999,'Carlos Ruiz','Administracion');
 
 ```
+# DATOS MATERIAS 
+```sql
+INSERT INTO materias VALUES
+(10,'Bases de Datos',1,1050607933),
+(11,'Programacion Avanzada',1,1050607933),
+(20,'Marxismo I',2,1050607010),
+(21,'Fundamentos del Estado',2,1050607010),
+(30,'Contabilidad',3,1050607999),
+(31,'Economia Digital',1,1050607999),
+(40,'Inteligencia Artificial',1,1050607933);
+```
+# DATOS ESTUDIANTES
+```sql
+INSERT INTO estudiante
+(nombre_completo,email,fecha_nacimiento,estado,cod_carrera)
+VALUES
+('Juan Perez','juan@correo.com','2004-05-12','Activo',1),
+
+('Ana Gomez','ana@correo.com','2003-07-11','Activo',1),
+
+('Pedro Ruiz','pedro@correo.com','2002-09-20','Activo',1),
+
+('Laura Torres','laura@correo.com','2004-01-10','Activo',1),
+
+('Maria Diaz','maria@correo.com','2003-06-15','Activo',2),
+
+('Camilo Vargas','camilo@correo.com','2004-02-22','Activo',2),
+
+('Sofia Castro','sofia@correo.com','2003-10-10','Activo',3);
+```
+# DATOS MATRICULAS
+
+```sql
+INSERT INTO matricula VALUES
+(100,10,2024,1,4.7),
+(100,11,2024,2,4.9),
+(100,31,2025,1,4.8),
+
+(101,10,2024,1,3.8),
+(101,11,2024,2,4.0),
+
+(102,10,2024,1,2.5),
+(102,11,2024,2,3.0),
+
+(103,10,2024,1,4.5),
+(103,31,2024,2,4.6),
+
+(104,20,2024,1,2.6),
+(104,21,2024,2,3.2),
+
+(105,20,2024,1,4.3),
+(105,21,2024,2,4.4),
+
+(106,30,2024,1,4.9),
+(106,30,2025,1,4.7);
+```
+
 # Modificaciones a las tablas
 Utilizamos consultas DDL, para modificar las tablas de matricula y profesor.
 
